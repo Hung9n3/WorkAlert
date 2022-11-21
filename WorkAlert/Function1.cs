@@ -14,15 +14,25 @@ namespace WorkAlert
         [FunctionName("Function1")]
         public async Task Run([TimerTrigger("0 */1 * * * *")]TimerInfo myTimer, ILogger log)
         {
-            string defaultConnection = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(defaultConnection);
-            var users = await response.Content.ReadFromJsonAsync<User>();
-            foreach(var w in users.Calendar.Works)
+            try
             {
-                log.LogInformation($" Hello {users.Name} you have a work start at: {w.Start}");
+                string defaultConnection = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
+                log.LogInformation($" ConnectionString: {defaultConnection}");
+
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync(defaultConnection);
+                var users = await response.Content.ReadFromJsonAsync<User>();
+                foreach (var w in users.Calendar.Works)
+                {
+                    log.LogInformation($" Hello {users.Name} you have a work start at: {w.Start}");
+                }
             }
-            
+            catch(Exception ex)
+            {
+                log.LogInformation($" {ex.Message}");
+            }
+
+
         }
     }
 }
