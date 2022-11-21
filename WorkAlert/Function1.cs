@@ -18,7 +18,7 @@ namespace WorkAlert
         {
             try
             {
-                var defaultConnection = "https://apifortodo.azurewebsites.net/api/User/Get/1";
+                //var defaultConnection = "https://apifortodo.azurewebsites.net/api/User/Get/1";
                 //log.LogInformation("Hello");
                 //var config = new ConfigurationBuilder()
                 //    .SetBasePath(context.FunctionAppDirectory)
@@ -27,7 +27,7 @@ namespace WorkAlert
                 //    .Build();
                 //var defaultConnection = config.GetConnectionString("DefaultConnection");
                 //var setting1 = config["Setting1"];
-                //string defaultConnection = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
+                string defaultConnection = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
                 log.LogInformation($" ConnectionString: {defaultConnection}");
 
                 HttpClient client = new HttpClient();
