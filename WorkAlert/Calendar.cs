@@ -10,5 +10,6 @@ namespace WorkAlert
     {
         public int Id { get; set; }
         public List<Work> Works { get; set; }
+        public int UserId { get; set; }
     }
 }
