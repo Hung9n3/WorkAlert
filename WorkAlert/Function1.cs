@@ -17,6 +17,7 @@ namespace WorkAlert
         {
             try
             {
+                log.LogInformation("Hello");
                 var config = new ConfigurationBuilder()
                     .SetBasePath(context.FunctionAppDirectory)
                     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
