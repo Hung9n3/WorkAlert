@@ -16,11 +16,11 @@ namespace WorkAlert
 {
     public class Function1
     {
-        private readonly Context _context;
+        //private readonly Context _context;
 
-        public Function1(Context context)
+        public Function1()
         {
-            _context = context;
+            //_context = context;
         }
         [FunctionName("Function1")]
         public async Task Run([TimerTrigger("0 */1 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
@@ -58,13 +58,4 @@ namespace WorkAlert
 
         }
     }
-    //public class ContextFactory : IDesignTimeDbContextFactory<Context>
-    //{
-    //    public Context CreateDbContext(string[] args)
-    //    {
-    //        var optionsBuilder = new DbContextOptionsBuilder<Context>();
-    //        optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings:SqlConnection"));
-    //        return new Context(optionsBuilder.Options);
-    //    }
-    //}
 }
