@@ -17,9 +17,16 @@ namespace WorkAlert
         {
 
             //logger.LogInformation("Hello...");
+            ExecutionContext context = new();
+            var config = new ConfigurationBuilder()
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+            string SqlConnection = config.GetConnectionString("SqlConnection");
             //string SqlConnection = Environment.GetEnvironmentVariable("ConnectionStrings:SqlConnection");
-            //builder.Services.AddDbContext<Context>(
-            //    options => options.UseSqlServer(SqlConnection));
+            builder.Services.AddDbContext<Context>(
+                options => options.UseSqlServer(SqlConnection), ServiceLifetime.Scoped);
+            //builder.Services.AddTransient<Service>();
         }
     }
 }

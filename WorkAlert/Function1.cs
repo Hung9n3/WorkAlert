@@ -17,7 +17,6 @@ namespace WorkAlert
     public class Function1
     {
         //private readonly Context _context;
-
         public Function1()
         {
             //_context = context;
@@ -30,21 +29,19 @@ namespace WorkAlert
                 //var list = await _context.Users.Select(x => x.Id).Where(x => x == 1).FirstOrDefaultAsync();
                 log.LogInformation("Hello");
                 //Create config instance
-                //var config = new ConfigurationBuilder()
-                //    .SetBasePath(context.FunctionAppDirectory)
-                //    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                //    .AddEnvironmentVariables()
-                //    .Build();
-                //var setting1 = config["Setting1"];
-                string defaultConnection = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+                var setting1 = config["Setting1"];
+                var defaultConnection = config.GetConnectionString("DefaultConnection");
                 //Calling db
 
                 //Calling api
-                //var defaultConnection = config.GetConnectionString("DefaultConnection");
                 log.LogInformation($" ConnectionString: {defaultConnection}");
                 HttpClient client = new HttpClient();
-                var response = await client.GetAsync(defaultConnection);
-                var users = await response.Content.ReadFromJsonAsync<User>();
+                var users = await (await client.GetAsync(defaultConnection)).Content.ReadFromJsonAsync<User>();
                 foreach (var w in users.Calendar.Works)
                 {
                     log.LogInformation($" Hello {users.Name} you have a work start at: {w.Start}");
