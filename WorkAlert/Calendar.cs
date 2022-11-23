@@ -9,7 +9,7 @@ namespace WorkAlert
     public class Calendar
     {
         public int Id { get; set; }
-        public List<Work> Works { get; set; }
+        public ICollection<Work> Works { get; set; } = new List<Work>();
         public int UserId { get; set; }
     }
 }

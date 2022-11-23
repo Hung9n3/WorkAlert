@@ -10,44 +10,50 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Options;
 
 namespace WorkAlert
 {
     public class Function1
     {
-        //private readonly Context _context;
-        public Function1()
+        private readonly Context _context;
+        public Function1(Context context)
         {
-            //_context = context;
+            _context = context;
         }
         [FunctionName("Function1")]
-        public async Task Run([TimerTrigger("0 */1 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             try
             {
-                //var list = await _context.Users.Select(x => x.Id).Where(x => x == 1).FirstOrDefaultAsync();
                 log.LogInformation("Hello");
-                //Create config instance
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
-                var setting1 = config["Setting1"];
-                var defaultConnection = config.GetConnectionString("DefaultConnection");
-                //Calling db
-
-                //Calling api
-                log.LogInformation($" ConnectionString: {defaultConnection}");
-                HttpClient client = new HttpClient();
-                var users = await (await client.GetAsync(defaultConnection)).Content.ReadFromJsonAsync<User>();
-                foreach (var w in users.Calendar.Works)
+                var list = await _context.Users.AsNoTracking().Include(x => x.Calendar).ThenInclude(x => x.Works).ToListAsync();
+                foreach(var u in list)
                 {
-                    log.LogInformation($" Hello {users.Name} you have a work start at: {w.Start}");
+                    if(u.Calendar.Works.Count > 0)
+                    {
+                        foreach (var w in u.Calendar.Works)
+                        {
+                            log.LogInformation($" Hello {u.Name} you have a work start at: {w.Start}");
+                        }
+                    }
+                    else log.LogInformation($" Hello {u.Name} you don't have any {nameof(u.Calendar.Works)} today");
                 }
+
+                //Call Api
+                //var config = new ConfigurationBuilder()
+                //    .SetBasePath(context.FunctionAppDirectory)
+                //    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                //    .AddEnvironmentVariables()
+                //    .Build();
+                //var setting1 = config["Setting1"];
+                //var apiConnection = config.GetConnectionString("ApiConnection");
+
+                //HttpClient client = new HttpClient();
+                ////Get user has id = 1
+                //var user = await (await client.GetAsync(apiConnection)).Content.ReadFromJsonAsync<User>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.LogInformation($" {ex.Message}");
             }

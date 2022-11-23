@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Azure.WebJobs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,4 +23,22 @@ namespace WorkAlert
             base.OnModelCreating(modelBuilder);
         }
     }
+    //public class ContextFactory : IDesignTimeDbContextFactory<Context>
+    //{
+    //    public Context CreateDbContext(string[] args)
+    //    {
+    //        ExecutionContext context = new();
+    //        var config = new ConfigurationBuilder()
+    //                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+    //                .AddEnvironmentVariables()
+    //                .Build();
+    //        string SqlConnection = config.GetConnectionString("LocalConnection");
+
+            
+    //        var optionsBuilder = new DbContextOptionsBuilder<Context>();
+    //        optionsBuilder.UseSqlServer(SqlConnection);
+
+    //        return new Context(optionsBuilder.Options);
+    //    }
+    //}
 }
